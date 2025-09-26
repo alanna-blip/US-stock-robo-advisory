@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy to Google Cloud Run
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY_JSON }}'
+
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: Build and Push Docker image
+        run: |-
+          gcloud builds submit --region ${{ secrets.GCP_REGION }} --tag ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app/app:latest
+
+      - name: Deploy to Cloud Run
+        run: |-
+          gcloud run deploy portfolio-simulator \
+            --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-app/app:latest \
+            --platform managed \
+            --region ${{ secrets.GCP_REGION }} \
+            --allow-unauthenticated \
+            --port=8080 \
+            --set-env-vars="FIREBASE_CREDS_BASE64=${{ secrets.FIREBASE_CREDS_BASE64 }},FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }},GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }},AZURE_OPENAI_ENDPOINT=${{ secrets.AZURE_OPENAI_ENDPOINT }},AZURE_OPENAI_API_KEY=${{ secrets.AZURE_OPENAI_API_KEY }},AZURE_OPENAI_API_VERSION=${{ secrets.AZURE_OPENAI_API_VERSION }},AZURE_OPENAI_DEPLOYMENT_NAME=${{ secrets.AZURE_OPENAI_DEPLOYMENT_NAME }},NEWS_API_KEY=${{ secrets.NEWS_API_KEY }}"

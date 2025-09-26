@@ -1,0 +1,11 @@
+streamlit
+yfinance
+pandas
+plotly-express
+python-dotenv
+numpy
+requests
+firebase-admin
+pyrebase4
+openai
+newsapi-python
