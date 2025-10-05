@@ -13,7 +13,7 @@
 
 ## 🚀 快速導覽 (Quick Access)
 
-- 🎥 **專案 Demo 影片** → 
+- 🎥 **專案 Demo 影片** → https://youtu.be/dJCqkzeqtNo
 - 📊 **精華投影片** → https://gamma.app/docs/AI--o16fl07oitwzi7n
 - 🌐 **線上 Live Demo** → https://portfolio-simulator-814789211485.asia-east1.run.app/
   > ⚠️ 注意：服務可能因資源限制而休眠，首次載入較慢。  
@@ -57,57 +57,6 @@
 | 版本控制 | Git, GitHub | 協作與版本管理 |
 
 ---
-
-## 🏗️ 系統架構圖 (System Architecture)
-
-```mermaid
-flowchart TD
-
-    subgraph User["👤 使用者"]
-        A[Web 瀏覽器<br/>(Streamlit 前端)]
-    end
-
-    subgraph App["🚀 Cloud Run App (Docker + Streamlit)"]
-        B[投資組合管理模組] 
-        C[AI 模型服務串接] 
-        D[新聞摘要模組] 
-        E[績效追蹤與金融指標]
-    end
-
-    subgraph APIs["🌐 外部 API"]
-        F[Gemini API] 
-        G[Azure OpenAI API] 
-        H[NewsAPI] 
-        I[yfinance (Yahoo Finance)]
-    end
-
-    subgraph Firebase["☁️ Firebase 後端"]
-        J[(Firestore Database)]
-        K[(Authentication)]
-    end
-
-    %% Connections
-    A -->|HTTP 請求| B
-    A -->|登入/註冊| K
-    B --> C
-    B --> E
-    C --> F
-    C --> G
-    D --> H
-    E --> I
-    B --> J
-    D --> J
-    E --> J
-```
-
-🔄 使用流程圖 (User Flow)
-flowchart LR
-
-    Start([登入/註冊]) --> Dashboard[進入個人化儀表板]
-    Dashboard --> Invest[獲取 AI 投資建議<br/>（Gemini / Azure OpenAI）]
-    Invest --> News[每日市場新聞摘要<br/>（NewsAPI + Gemini 分析）]
-    News --> Track[即時追蹤投資組合績效<br/>（股價、報酬率、風險指標）]
-    Track --> Dashboard
 
 💻 本地開發設定 (Local Development Setup)
 1.複製專案
